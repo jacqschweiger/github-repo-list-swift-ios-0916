@@ -9,7 +9,30 @@
 import UIKit
 
 class ReposDataStore {
+    //all the data!
     
     static let sharedInstance = ReposDataStore()
     
+    private init() {}
+    
+    var repositories: [GithubRepository]!
+    
+    func getRepositoriesFromAPI(completion: @escaping ()->()) {
+        
+        repositories = []
+        
+        //get dictionaries, turn into repositories, append to array of GitHubRepositories. needs completion closure bc autofill. autofill looks like this: GithubAPIClient.getRepositories(with: ([[String : AnyObject]]) -> Void)
+        //retitle dictionary array argument as repo
+        
+        //talks to API, gets the API versions of the repositories
+           GithubAPIClient.getRepositories { (repos) in
+            for repo in repos {
+                let newRepo = GithubRepository.init(dictionary: repo)
+                //for each, creates instance using class so code workable
+                self.repositories.append(newRepo)
+                //adds repo to array
+            }
+            completion()
+        }
+    }
 }
